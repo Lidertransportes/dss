@@ -1,0 +1,9 @@
+{
+  "name": "lider-dss",
+  "version": "1.0.0",
+  "description": "Atualização automática do DSS",
+  "main": "atualizar.js",
+  "dependencies": {
+    "csv-parser": "^3.0.0"
+  }
+}
