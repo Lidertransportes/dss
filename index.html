@@ -8,6 +8,7 @@
 
 <title>Líder Transportes - DSS Diário</title>
 
+<link rel="icon" href="logo.png">
 <link rel="stylesheet" href="style.css">
 
 </head>
@@ -18,7 +19,7 @@
 
     <div class="card">
 
-        <img src="logo.png" alt="Líder Transportes" class="logo">
+        <img src="logo.png" class="logo">
 
         <h2>DSS Diário</h2>
 
@@ -26,7 +27,7 @@
 
             <div class="linha">
                 <span>📅 Data</span>
-                <strong id="data">--/--/----</strong>
+                <strong id="dataHoje"></strong>
             </div>
 
             <div class="linha">
@@ -36,9 +37,11 @@
 
         </div>
 
-        <button id="btn" disabled>
+        <button id="btnAbrir" disabled>
             🚍 ABRIR DSS
         </button>
+
+        <p id="mensagem"></p>
 
         <small>
             Sistema de Diálogo Diário de Segurança
