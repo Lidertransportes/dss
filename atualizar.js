@@ -2,7 +2,7 @@ const fs = require("fs");
 const https = require("https");
 const csv = require("csv-parser");
 
-const URL = "SEU_LINK_CSV_PUBLICADO";
+const URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQWv34_S3TGjQmrCeo_IK-5fOdstCk8x4o4pieq4YGkAvVDbKtOjWnsMhSsJQyxlMWLpjv0bCtR3UBN/pub?output=csv";
 
 const dados = [];
 
