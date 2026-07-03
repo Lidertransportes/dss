@@ -13,10 +13,14 @@ https.get(URL, (res) => {
 
         .on("data", (row) => {
 
-            dados.push({
-                data: row.Data,
-                link: row.Link
-            });
+            if (row.Data && row.Link) {
+
+                dados.push({
+                    data: row.Data.trim(),
+                    link: row.Link.trim()
+                });
+
+            }
 
         })
 
@@ -24,11 +28,16 @@ https.get(URL, (res) => {
 
             fs.writeFileSync(
                 "dados.json",
-                JSON.stringify(dados, null, 4)
+                JSON.stringify(dados, null, 4),
+                "utf8"
             );
 
-            console.log("dados.json atualizado!");
+            console.log(`✔ ${dados.length} registros atualizados.`);
 
         });
+
+}).on("error", (err) => {
+
+    console.error(err);
 
 });
