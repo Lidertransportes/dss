@@ -1,45 +1,86 @@
-const URL = "https://opensheet.elk.sh/2PACX-1vQWv34_S3TGjQmrCeo_IK-5fOdstCk8x4o4pieq4YGkAvVDbKtOjWnsMhSsJQyxlMWLpjv0bCtR3UBN/DSS";
+const dataHoje = document.getElementById("dataHoje");
+const status = document.getElementById("status");
+const mensagem = document.getElementById("mensagem");
+const btnAbrir = document.getElementById("btnAbrir");
 
-const dataEl = document.getElementById("data");
-const statusEl = document.getElementById("status");
-const btn = document.getElementById("btn");
+const agora = new Date();
 
-const hoje = new Date();
+const dias = [
+    "Domingo",
+    "Segunda-feira",
+    "Terça-feira",
+    "Quarta-feira",
+    "Quinta-feira",
+    "Sexta-feira",
+    "Sábado"
+];
 
-const dataHoje =
-String(hoje.getDate()).padStart(2,"0") + "/" +
-String(hoje.getMonth()+1).padStart(2,"0") + "/" +
-hoje.getFullYear();
+const dataAtual =
+String(agora.getDate()).padStart(2,"0") + "/" +
+String(agora.getMonth()+1).padStart(2,"0") + "/" +
+agora.getFullYear();
 
-dataEl.textContent = dataHoje;
+dataHoje.innerHTML =
+dias[agora.getDay()] +
+"<br><strong>" +
+dataAtual +
+"</strong>";
 
-fetch(URL)
-.then(r => r.json())
-.then(dados => {
+async function carregar(){
 
-    const registro = dados.find(l => l.Data === dataHoje);
+    try{
 
-    if(registro){
+        const resposta = await fetch("./dados.json?v=" + Date.now());
 
-        statusEl.innerHTML = "🟢 Disponível";
+        if(!resposta.ok)
+            throw new Error();
 
-        btn.disabled = false;
+        const dados = await resposta.json();
 
-        btn.onclick = () => {
+        const dss = dados.find(item => item.data === dataAtual);
 
-            window.location.href = registro.Link;
+        if(!dss){
+
+            status.innerHTML="🔴 Não disponível";
+            status.className="valor status-erro";
+
+            mensagem.innerHTML=
+            "Ainda não existe um DSS cadastrado para hoje.";
+
+            btnAbrir.disabled=true;
+
+            return;
+
+        }
+
+        status.innerHTML="🟢 Disponível";
+        status.className="valor status-ok";
+
+        mensagem.innerHTML=
+        "Clique no botão abaixo para abrir o DSS.";
+
+        btnAbrir.disabled=false;
+
+        btnAbrir.onclick=()=>{
+
+            window.location.href=dss.link;
 
         };
 
-    }else{
+    }
 
-        statusEl.innerHTML = "🔴 Não existe DSS para hoje.";
+    catch(e){
+
+        console.error(e);
+
+        status.innerHTML="⚠ Erro";
+        status.className="valor status-erro";
+
+        mensagem.innerHTML=
+        "Erro ao carregar o sistema.";
 
     }
 
-})
-.catch(() => {
+}
 
-    statusEl.innerHTML = "Erro ao carregar a planilha.";
-
-});
+carregar();
