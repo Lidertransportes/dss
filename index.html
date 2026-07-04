@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Líder Transportes - DSS Diário</title>
+<title>Líder Transportes | DSS Diário</title>
 
 <link rel="icon" href="logo.png">
 <link rel="stylesheet" href="style.css">
@@ -19,47 +19,77 @@
 
     <div class="card">
 
-        <img src="logo.png" class="logo">
+        <!-- Logo -->
+        <img src="logo.png" alt="Líder Transportes" class="logo">
 
+        <!-- Título -->
         <h2>DSS Diário</h2>
 
+        <!-- Data e Status -->
         <div class="info">
 
             <div class="linha">
                 <span>📅 Data</span>
-                <strong id="dataHoje"></strong>
+                <strong id="dataHoje">Carregando...</strong>
             </div>
 
             <div class="linha">
                 <span>📋 Situação</span>
-                <strong id="status">Carregando...</strong>
+                <strong id="status">Verificando...</strong>
             </div>
 
         </div>
 
+        <!-- Botão -->
         <button id="btnAbrir" disabled>
             🚍 ABRIR DSS
         </button>
 
-<p id="mensagem"></p>
+        <!-- Mensagem dinâmica -->
+        <p id="mensagem" class="mensagem">
+            Verificando disponibilidade do DSS...
+        </p>
 
-<div class="aviso">
+        <!-- Observações Fixas -->
+        <div class="aviso">
 
-    <p><strong>⚠️ Importante</strong></p>
+            <h3>⚠️ Importante</h3>
 
-    <ul>
-        <li>O DSS deve ser preenchido antes do início da sua atividade.</li>
-        <li>O preenchimento deve ser realizado apenas durante o seu turno de trabalho.</li>
-        <li>Não é necessário preencher o DSS nos dias de folga.</li>
-    </ul>
+            <ul>
 
-</div>
+                <li>
+                    O DSS deve ser preenchido
+                    <strong>antes do início da sua atividade.</strong>
+                </li>
 
-<small>
-    Sistema de Diálogo Diário de Segurança
-    <br>
-    <strong>Líder Transportes</strong>
-</small>
+                <li>
+                    O preenchimento deve ser realizado
+                    <strong>somente durante o seu turno de trabalho.</strong>
+                </li>
+
+                <li>
+                    Não é necessário preencher o DSS
+                    nos dias de folga.
+                </li>
+
+            </ul>
+
+        </div>
+
+        <!-- Rodapé -->
+        <small>
+
+            Sistema de Diálogo Diário de Segurança
+
+            <br><br>
+
+            <strong>Líder Transportes</strong>
+
+            <br>
+
+            Sua satisfação, nossa motivação.
+
+        </small>
 
     </div>
 
@@ -68,4 +98,5 @@
 <script src="script.js"></script>
 
 </body>
+
 </html>
