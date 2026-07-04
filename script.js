@@ -1,11 +1,18 @@
+/*
+==========================================
+LÍDER TRANSPORTES
+DSS Diário
+Versão 1.0
+==========================================
+*/
+
 const dataHoje = document.getElementById("dataHoje");
 const status = document.getElementById("status");
 const mensagem = document.getElementById("mensagem");
 const btnAbrir = document.getElementById("btnAbrir");
 
-const agora = new Date();
-
-const dias = [
+// Dias da semana
+const diasSemana = [
     "Domingo",
     "Segunda-feira",
     "Terça-feira",
@@ -15,14 +22,21 @@ const dias = [
     "Sábado"
 ];
 
-const dataAtual =
-String(agora.getDate()).padStart(2, "0") + "/" +
-String(agora.getMonth() + 1).padStart(2, "0") + "/" +
-agora.getFullYear();
+// Data atual
+const hoje = new Date();
 
-dataHoje.innerHTML = `${dias[agora.getDay()]}<br><strong>${dataAtual}</strong>`;
+const dia = String(hoje.getDate()).padStart(2, "0");
+const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+const ano = hoje.getFullYear();
 
-async function carregar() {
+const dataAtual = `${dia}/${mes}/${ano}`;
+
+dataHoje.innerHTML =
+`${diasSemana[hoje.getDay()]}<br>${dataAtual}`;
+
+carregarDSS();
+
+async function carregarDSS() {
 
     try {
 
@@ -30,20 +44,23 @@ async function carregar() {
             cache: "no-store"
         });
 
-        if (!resposta.ok)
+        if (!resposta.ok) {
             throw new Error("Erro ao carregar dados.json");
+        }
 
         const dados = await resposta.json();
 
-        const dss = dados.find(item => item.data === dataAtual);
+        const registro = dados.find(item =>
+            item.data.trim() === dataAtual
+        );
 
-        if (!dss) {
+        if (!registro) {
 
-            status.innerHTML = "🔴 Não disponível";
+            status.textContent = "🔴 Não disponível";
             status.className = "valor status-erro";
 
-            mensagem.innerHTML =
-                "Ainda não existe um formulário cadastrado para hoje.";
+            mensagem.textContent =
+            "Não existe DSS disponível para a data de hoje.";
 
             btnAbrir.disabled = true;
 
@@ -51,17 +68,17 @@ async function carregar() {
 
         }
 
-        status.innerHTML = "🟢 Disponível";
+        status.textContent = "🟢 Disponível";
         status.className = "valor status-ok";
 
-        mensagem.innerHTML =
-            "Clique no botão abaixo para abrir o DSS.";
+        mensagem.textContent =
+        "Clique no botão abaixo para abrir o DSS.";
 
         btnAbrir.disabled = false;
 
-        btnAbrir.onclick = () => {
+        btnAbrir.onclick = function () {
 
-            window.open(dss.link, "_blank");
+            window.location.href = registro.link;
 
         };
 
@@ -71,14 +88,14 @@ async function carregar() {
 
         console.error(erro);
 
-        status.innerHTML = "⚠ Erro";
+        status.textContent = "⚠️ Erro";
         status.className = "valor status-erro";
 
-        mensagem.innerHTML =
-            "Não foi possível carregar o arquivo dados.json.";
+        mensagem.textContent =
+        "Erro ao carregar as informações do DSS.";
+
+        btnAbrir.disabled = true;
 
     }
 
 }
-
-carregar();
