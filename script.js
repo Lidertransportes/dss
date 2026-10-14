@@ -1,9 +1,6 @@
 /*
-==========================================
-LÍDER TRANSPORTES
-DSS Diário
-Versão 1.0
-==========================================
+LÍDER TRANSPORTES — DSS Diário
+Consulta os dados ao abrir a página e a cada minuto.
 */
 
 const dataHoje = document.getElementById("dataHoje");
@@ -11,7 +8,6 @@ const status = document.getElementById("status");
 const mensagem = document.getElementById("mensagem");
 const btnAbrir = document.getElementById("btnAbrir");
 
-// Dias da semana
 const diasSemana = [
     "Domingo",
     "Segunda-feira",
@@ -22,27 +18,31 @@ const diasSemana = [
     "Sábado"
 ];
 
-// Data atual
-const hoje = new Date();
-
-const dia = String(hoje.getDate()).padStart(2, "0");
-const mes = String(hoje.getMonth() + 1).padStart(2, "0");
-const ano = hoje.getFullYear();
-
-const dataAtual = `${dia}/${mes}/${ano}`;
-
-dataHoje.innerHTML =
-`${diasSemana[hoje.getDay()]}<br>${dataAtual}`;
-
-carregarDSS();
+let carregando = false;
 
 async function carregarDSS() {
+    if (carregando) return;
+    carregando = true;
+
+    // Recalcula a data a cada consulta, inclusive após a meia-noite.
+    const hoje = new Date();
+    const dia = String(hoje.getDate()).padStart(2, "0");
+    const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+    const ano = hoje.getFullYear();
+    const dataAtual = `${dia}/${mes}/${ano}`;
+
+    dataHoje.innerHTML =
+        `${diasSemana[hoje.getDay()]}<br>${dataAtual}`;
+
+    // Bloqueia o link anterior enquanto verifica os dados.
+    btnAbrir.disabled = true;
+    btnAbrir.onclick = null;
 
     try {
-
-        const resposta = await fetch("./dados.json?v=" + Date.now(), {
-            cache: "no-store"
-        });
+        const resposta = await fetch(
+            "./dados.json?v=" + Date.now(),
+            { cache: "no-store" }
+        );
 
         if (!resposta.ok) {
             throw new Error("Erro ao carregar dados.json");
@@ -51,51 +51,49 @@ async function carregarDSS() {
         const dados = await resposta.json();
 
         const registro = dados.find(item =>
-            item.data.trim() === dataAtual
+            String(item.data || "").trim() === dataAtual
         );
 
-        if (!registro) {
-
+        if (!registro || !String(registro.link || "").trim()) {
             status.textContent = "🔴 Não disponível";
             status.className = "valor status-erro";
-
             mensagem.textContent =
-            "Não existe DSS disponível para a data de hoje.";
-
-            btnAbrir.disabled = true;
-
+                "Não existe DSS disponível para a data de hoje.";
             return;
-
         }
 
         status.textContent = "🟢 Disponível";
         status.className = "valor status-ok";
-
         mensagem.textContent =
-        "Clique no botão abaixo para abrir o DSS.";
+            "Clique no botão abaixo para abrir o DSS.";
 
         btnAbrir.disabled = false;
-
         btnAbrir.onclick = function () {
-
-            window.location.href = registro.link;
-
+            window.location.href = String(registro.link).trim();
         };
 
-    }
-
-    catch (erro) {
-
+    } catch (erro) {
         console.error(erro);
 
         status.textContent = "⚠️ Erro";
         status.className = "valor status-erro";
-
         mensagem.textContent =
-        "Erro ao carregar as informações do DSS.";
+            "Erro ao carregar o DSS. Nova tentativa automática em até 1 minuto.";
 
-        btnAbrir.disabled = true;
-
+    } finally {
+        carregando = false;
     }
-
 }
+
+// Consulta ao abrir.
+carregarDSS();
+
+// Consulta novamente a cada 60 segundos.
+setInterval(carregarDSS, 60000);
+
+// Consulta ao retornar para a aba no navegador.
+document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) {
+        carregarDSS();
+    }
+});
