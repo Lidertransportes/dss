@@ -4,100 +4,111 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="DSS Diário — Diálogo Diário de Segurança da Líder Transportes.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0d47a1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1424" media="(prefers-color-scheme: dark)">
+
+<!-- Atalho na tela inicial ("app") -->
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DSS Líder">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="favicon.png" type="image/png">
 
 <title>Líder Transportes | DSS Diário</title>
 
-<link rel="icon" href="logo.png">
 <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
-<div class="container">
+<!-- Ícones (desenhados uma vez, usados com <use>) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-calendario" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/></symbol>
+    <symbol id="i-nao" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></symbol>
+    <symbol id="i-alerta" viewBox="0 0 24 24"><path d="M12 3.5L2.5 20h19z"/><path d="M12 10v4.5M12 17.2v.3"/></symbol>
+    <symbol id="i-relogio" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-seta" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-volante" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M3.5 10.5l6 1M20.5 10.5l-6 1M12 14.5V21"/></symbol>
+    <symbol id="i-folga" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
+    <symbol id="i-instalar" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 7v7M9 11l3 3 3-3"/></symbol>
+</svg>
+
+<main class="container">
 
     <div class="card">
 
-        <!-- Logo -->
-        <img src="logo.png" alt="Líder Transportes" class="logo">
-
-        <!-- Título -->
-        <h2>DSS Diário</h2>
-
-        <!-- Data e Status -->
-        <div class="info">
-
-            <div class="linha">
-                <span>📅 Data</span>
-                <strong id="dataHoje">Carregando...</strong>
-            </div>
-
-            <div class="linha">
-                <span>📋 Situação</span>
-                <strong id="status">Verificando...</strong>
-            </div>
-
+        <!-- Logo (sempre sobre fundo branco, inclusive no modo escuro) -->
+        <div class="topo">
+            <img src="logo.png" alt="Líder Transportes" class="logo" width="480" height="183">
         </div>
 
-        <!-- Botão -->
-        <button id="btnAbrir" disabled>
-            🚍 ABRIR DSS
-        </button>
+        <div class="conteudo">
 
-        <!-- Mensagem dinâmica -->
-        <p id="mensagem" class="mensagem">
-            Verificando disponibilidade do DSS...
-        </p>
+            <h1>DSS Diário</h1>
 
-        <!-- Observações Fixas -->
-        <div class="aviso">
+            <p class="data">
+                <svg class="icone"><use href="#i-calendario"/></svg>
+                <span id="dataHoje">Carregando…</span>
+            </p>
 
-            <h3>⚠️ Importante</h3>
+            <!-- Situação do dia -->
+            <div id="situacao" class="situacao verificando" role="status" aria-live="polite">
+                <svg class="icone-grande"><use id="situacaoIcone" href="#i-relogio"/></svg>
+                <div>
+                    <strong id="situacaoTitulo">Verificando…</strong>
+                    <span id="situacaoTexto">Consultando o DSS de hoje.</span>
+                </div>
+            </div>
 
-            <ul>
+            <!-- Botão -->
+            <a id="btnAbrir" class="botao" href="#" role="button" aria-disabled="true">
+                <span id="btnTexto">Aguarde…</span>
+                <svg class="icone"><use href="#i-seta"/></svg>
+            </a>
 
+            <noscript>
+                <p class="noscript">Ative o JavaScript do navegador para abrir o DSS.</p>
+            </noscript>
+
+            <!-- Regras -->
+            <ul class="regras">
                 <li>
-                    O DSS deve ser preenchido
-                    <strong>antes do início da sua atividade.</strong>
+                    <svg class="icone"><use href="#i-volante"/></svg>
+                    <span>Preencha <strong>antes de iniciar</strong> a atividade.</span>
                 </li>
-
                 <li>
-                    O preenchimento deve ser realizado
-                    <strong>somente durante o seu turno de trabalho.</strong>
+                    <svg class="icone"><use href="#i-relogio"/></svg>
+                    <span>Somente <strong>durante o seu turno</strong> de trabalho.</span>
                 </li>
-
                 <li>
-                    Não é necessário preencher o DSS
-                    nos dias de folga.
+                    <svg class="icone"><use href="#i-folga"/></svg>
+                    <span>Na <strong>folga</strong>, não precisa preencher.</span>
                 </li>
-
             </ul>
 
+            <!-- Atalho na tela inicial (aparece só quando o celular permite) -->
+            <button id="btnInstalar" class="instalar" type="button" hidden>
+                <svg class="icone"><use href="#i-instalar"/></svg>
+                Colocar atalho na tela inicial
+            </button>
+
+            <footer class="rodape">
+                Diálogo Diário de Segurança · <strong>Líder Transportes</strong>
+            </footer>
+
         </div>
-
-        <!-- Rodapé -->
-        <small>
-
-            Sistema de Diálogo Diário de Segurança
-
-            <br><br>
-
-            <strong>Líder Transportes</strong>
-
-            <br>
-
-            Sua satisfação, nossa motivação.
-
-        </small>
 
     </div>
 
-</div>
+</main>
 
 <script src="script.js"></script>
 
 </body>
 
 </html>
-
