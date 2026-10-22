@@ -299,3 +299,125 @@ h1{
 @media (prefers-reduced-motion: reduce){
     *{ animation:none !important; transition:none !important; }
 }
+
+/* ==========================================================
+   PREVISÃO DO TEMPO E ALERTA DE CONDUÇÃO
+   ========================================================== */
+
+.clima{
+    margin-top:22px;
+    text-align:left;
+}
+
+.clima h2{
+    font-size:17px;
+    color:var(--titulo);
+    margin-bottom:10px;
+}
+
+.clima-cidades{
+    display:grid;
+    gap:10px;
+}
+
+.clima-carregando{
+    color:var(--texto-suave);
+    font-size:15px;
+    padding:12px 0;
+}
+
+.cidade{
+    border:1.5px solid var(--linha);
+    border-left-width:5px;
+    border-radius:14px;
+    padding:12px 14px;
+    background:var(--cartao);
+}
+
+.cidade.nivel-ok{ border-left-color:var(--ok-borda); }
+.cidade.nivel-cuidado{ border-left-color:var(--ver-borda); }
+.cidade.nivel-atencao{ border-left-color:var(--erro-borda); }
+.cidade.nivel-perigo{ border-left-color:var(--sem-borda); }
+.cidade.indisponivel{ border-left-color:var(--desativado); }
+
+.cidade-topo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.cidade-icone{
+    width:38px; height:38px; flex:none;
+    fill:none; stroke:var(--titulo); stroke-width:1.8;
+    stroke-linecap:round; stroke-linejoin:round;
+}
+
+.cidade-info{ flex:1; min-width:0; }
+
+.cidade h3{
+    font-size:17px;
+    line-height:1.2;
+}
+
+.cidade .uf{
+    font-size:13px;
+    font-weight:normal;
+    color:var(--texto-suave);
+}
+
+.cidade-tempo{
+    font-size:14px;
+    color:var(--texto-suave);
+}
+
+.cidade-temp{
+    text-align:right;
+    line-height:1.1;
+    font-variant-numeric:tabular-nums;
+}
+.cidade-temp strong{ display:block; font-size:24px; }
+.cidade-temp span{ font-size:14px; color:var(--texto-suave); }
+
+.cidade-chuva{
+    margin-top:8px;
+    font-size:14px;
+    color:var(--texto-suave);
+}
+
+.alertas{
+    list-style:none;
+    margin-top:10px;
+    display:grid;
+    gap:8px;
+}
+
+.alerta{
+    padding:9px 11px;
+    border-radius:10px;
+    font-size:14px;
+    line-height:1.4;
+}
+
+.alerta.nivel-ok{ background:var(--ok-fundo); color:var(--ok-texto); }
+.alerta.nivel-cuidado{ background:var(--ver-fundo); color:var(--ver-texto); }
+.alerta.nivel-atencao{ background:var(--erro-fundo); color:var(--erro-texto); }
+.alerta.nivel-perigo{ background:var(--sem-fundo); color:var(--sem-texto); }
+
+.alerta-titulo{ font-weight:bold; }
+
+.selo{
+    display:inline-block;
+    padding:1px 7px;
+    margin-right:2px;
+    border-radius:6px;
+    border:1.5px solid currentColor;
+    font-size:12px;
+}
+
+.alerta-texto{ margin-top:3px; }
+
+.clima-fonte{
+    margin-top:8px;
+    font-size:12px;
+    color:var(--texto-suave);
+}
